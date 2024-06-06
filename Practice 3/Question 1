@@ -1,0 +1,76 @@
+class Graph:
+	def __init__(self, V):
+		self.V = V 
+		self.adj = [[] for i in range(V)]
+		def addPair(self, v, w):
+                        v -= 1
+                        w -= 1
+                        self.adj[v].append(w)
+                        self.adj[w].append(v) 
+	def disjointSets(self):
+		visited = [False] * self.V 
+		all_sets = [] 
+
+		def countAll(v, group):
+			visited[v] = True
+			group.append(v + 1) 
+			for neighbor in self.adj[v]:
+				if not visited[neighbor]:
+					countAll(neighbor, group)
+			    for i in range(self.V):
+                                    if not visited[i]:
+                                            group = []
+                                            countAll(i, group)
+                                            all_sets.append(group) 
+
+		return all_sets
+	
+# Driver Code
+
+# Input string
+Str = 'zcxfbe'
+# Number of elements
+N = 6
+# Pairs of indices indicating relationships
+Pairs = [[0, 1], [0, 2], [3, 5]] 
+
+# Create a graph with N vertices
+g = Graph(N) 
+
+# Add relations based on pairs
+for i in Pairs:
+	g.addPair(i[0], i[1])
+
+# Find groups formed by the relations
+groups = g.disjointSets()
+
+key = [] # List to store indices of characters
+value = [] # List to store characters
+
+# Sort characters within each group and store the results
+for i in range(len(groups)):
+	# Temporary list to store characters within a group
+	semians = [] 
+	for j in groups[i]:
+		# Extract characters from the input string
+		semians.append(Str[j]) 
+	# Sort the characters lexicographically
+	semians.sort()
+	# Sort the indices
+	groups[i].sort() 
+	
+	# Add sorted characters to the value list
+	value.extend(semians) 
+	# Add sorted indices to the key list
+	key.extend(groups[i]) 
+
+# Initialize a list to reconstruct the final string
+ans = [""] * N 
+
+# Reconstruct the final string 
+# based on sorted characters and indices
+for i in range(N):
+	ans[key[i]] = value[i]
+
+# Print the rearranged string
+print(''.join(ans))
