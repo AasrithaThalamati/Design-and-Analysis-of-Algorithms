@@ -1,0 +1,34 @@
+
+# Definition for a binary tree node.
+class TreeNode:
+    def __init__(self, val=0, left=None, right=None):
+        self.val = val
+        self.left = left
+        self.right = right
+
+class Solution:
+    def constructMaximumBinaryTree(self, nums: List[int]) -> Optional[TreeNode]:
+        def dfs(nums):
+            if not nums:
+                return None
+            val = max(nums)
+            i = nums.index(val)
+            root = TreeNode(val)
+            root.left = dfs(nums[:i])
+            root.right = dfs(nums[i + 1 :])
+            return root
+
+        return dfs(nums)
+
+# Helper function to print the tree in a readable format
+def print_tree(root: TreeNode, level=0, label='.'):
+    if root is not None:
+        print(' ' * (level*4) + label + ':', root.val)
+        print_tree(root.left, level+1, 'L')
+        print_tree(root.right, level+1, 'R')
+
+# Example usage
+nums = [3, 2, 1, 6, 0, 5]
+sol = Solution()
+tree_root = sol.constructMaximumBinaryTree(nums)
+print_tree(tree_root)
